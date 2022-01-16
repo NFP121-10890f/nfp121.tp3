@@ -15,50 +15,73 @@ public class Pile implements PileI {
     private int ptr;
 
     public Pile(int taille) {
-        // traiter le cas <=0
-        // a completer
+        if (taille <= 0)
+            taille = CAPACITE_PAR_DEFAUT;
+        this.zone = new Object[taille];
+        this.ptr = 0;
     }
 
     public Pile() {
-        this(0);
+        this(CAPACITE_PAR_DEFAUT);
     }
 
     public void empiler(Object o) throws PilePleineException {
-        // a completer
+        if (estPleine())
+            throw new PilePleineException();
+        this.zone[this.ptr] = o;
+        this.ptr++;
     }
 
     public Object depiler() throws PileVideException {
-        // a completer
-        return null;
+        if (estVide())
+            throw new PileVideException();
+        this.ptr--;
+        return zone[ptr];
     }
 
     public Object sommet() throws PileVideException {
-        // a completer
-        return null;
+        return zone[ptr-1];
     }
 
     public int capacite() {
-        // a completer
-        return -1;
+        return zone.length;
     }
 
     public int taille() {
-        // a completer
-        return -1;
+        return ptr;
     }
 
     public boolean estVide() {
-        // a completer
-        return false;
+        
+        return ptr == 0;
     }
 
     public boolean estPleine() {
-        // a completer
-        return false;
+        return ptr == zone.length;
     }
-
+    
+    // public boolean equals(Object o) {
+        // if (o instanceof PileI) {
+          // PileI p = (PileI) o;
+          // return this.capacite() == p.capacite()
+              // && this.hashCode() == p.hashCode();
+        // } else
+          // return false;
+    // }
     public boolean equals(Object o) {
-        // a completer
+        if(o instanceof Pile){
+        boolean t= (this.taille()==Pile.class.cast(o).taille());
+        boolean c= (this.capacite()==Pile.class.cast(o).capacite());
+        boolean egal=true;
+            if(t&&c){
+                for(int i=0;i<this.zone.length;i++){
+                    if(Pile.class.cast(o).zone[i]!=this.zone[i]){
+                        egal=false;
+                    }
+                }
+                return egal;
+            }
+        }
         return false;
     }
 
@@ -68,7 +91,13 @@ public class Pile implements PileI {
     }
 
     public String toString() {
-        // a completer
-        return null;
+        StringBuffer sb = new StringBuffer("[");
+        for (int i = ptr - 1; i >= 0; i--) {
+            sb.append(zone[i]);
+            if (i > 0)
+                sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }
